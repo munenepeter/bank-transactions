@@ -9,10 +9,46 @@ class Account {
     public function __construct() {
         $this->pdo = (new Database())->pdo; 
     }
+    public function deposit($id, $amount) {
+
+        try {
+            
+            $this->pdo->beginTransaction();
+
+            // insert new amount
+            $sql_update_to = 'UPDATE accounts
+                                SET amount = amount + :amount
+                                WHERE id = :id';
+            $stmt = $this->pdo->prepare($sql_update_to);
+            $stmt->execute([":id" => $to, ":amount" => $amount]);
+
+
+            // get available amount of the account after deposit
+            $sql = 'SELECT amount FROM accounts WHERE id=:id';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([":from" => $id]);
+            $availableAmount = (int) $stmt->fetchColumn();
+            $stmt->closeCursor();
+
+            // commit the transaction
+            $this->pdo->commit();
+
+            echo "You have successfully deposited {$amount}: Total balance {$availableAmount}".PHP_EOL;
+
+            return true;
+
+        } catch (PDOException $e) {
+
+            $this->pdo->rollBack();
+
+            die($e->getMessage());
+        }
+    }
 
     public function transfer($from, $to, $amount) {
 
         try {
+
             $this->pdo->beginTransaction();
 
             // get available amount of the transferer account
