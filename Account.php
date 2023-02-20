@@ -80,7 +80,7 @@ class Account {
             // commit the transaction
             $this->pdo->commit();
 
-            echo 'The amount has been transferred successfully'.PHP_EOL;
+            echo "The {$amount} has been transferred successfully".PHP_EOL;
 
             return true;
         } catch (PDOException $e) {
