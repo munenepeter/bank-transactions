@@ -3,7 +3,7 @@
 use Chungu\Core\Mantle\App;
 use Chungu\Core\Database\Connection;
 use Chungu\Core\Database\QueryBuilder;
-use Chungu\Core\Mantle\Mail;
+use Chungu\Core\Mantle\Config;
 
 //change TimeZone
 date_default_timezone_set('Africa/Nairobi'); 
@@ -19,11 +19,9 @@ require 'helpers.php';
 require_once __DIR__.'/../vendor/autoload.php';
 
 
-$envFilePath = __DIR__.'/.env';
-$config = new Config($envFilePath);
-$result = $config->load();
+$config = Config::load();
 
-print_r($result);
+print_r($config);
 
 
 //configure config to always point to config.php
@@ -31,7 +29,6 @@ App::bind('config', require 'config.php');
 
 session_start();
 
-$database = (is_dev()) ? App::get('config')['sqlite'] : App::get('config')['mysql'];
 
 /**
  *Bind the Database credentials and connect to the app
@@ -40,7 +37,5 @@ $database = (is_dev()) ? App::get('config')['sqlite'] : App::get('config')['mysq
 */
 
 App::bind('database', new QueryBuilder(
-    Connection::make($database)
+    Connection::make($config['db'])
 ));
-
-App::bind('mailer', new Mail(App::get('config')['mail']));

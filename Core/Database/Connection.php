@@ -7,19 +7,16 @@ class Connection {
     public static function make($config) {
 
         try {
-            if (is_dev()) {
-                //in dev mode
-                // return new \PDO("sqlite:" . Config::PATH_TO_SQLITE_FILE);
-                return new \PDO("sqlite:" . $config['path']);
-            } else {
-                //in prod mode
+
+            if($config['connection'] === 'sqlite'){
+                return new \PDO("sqlite:sqlite/db.sqlite");
+            }
                 return new \PDO(
                     $config['connection'] . ';dbname=' . $config['name'] .';charset=utf8mb4',
                     $config['username'],
                     $config['password'],
-                    $config['options']
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 );
-            }
         } catch (\PDOException $e) {
             //if anything happens throw an error
             abort($e->getMessage(), (int)$e->getCode());

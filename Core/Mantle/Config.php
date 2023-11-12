@@ -1,10 +1,10 @@
 <?php
 
 namespace Chungu\Core\Mantle;
-use Chungu\Mantle\Cache;
 
-class Config
-{
+use Chungu\Core\Mantle\Cache;
+
+class Config {
     protected static $env_file = APP_ROOT.'.env';
     protected static $cache_key = 'config_cache';
 
