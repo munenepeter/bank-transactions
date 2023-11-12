@@ -19,18 +19,22 @@ use Chungu\Core\Mantle\App; ?>
         <div class="m-2 min-w-[50%] shadow-lg rounded-md">
             <div class="p-4 bg-rose-100">
                 <?php
-                $errors = App::get('config')['codes'][$code];
+                $errors = App::get('config')[$code];
+
+                $client_title = ucwords(str_replace('-', ' ', key($errors)));
+                $client_message = trim(reset($errors), '"\'');
+
                 ?>
 
-                <h2 class="text-4xl py-2 text-orange-500"><?= $errors[0]; ?></h2>
-                <p class="text-purple-700"><?= $errors[1]; ?></p>
+                <h2 class="text-4xl py-2 text-orange-500"><?= $client_title; ?></h2>
+                <p class="text-purple-700"><?= $client_message; ?></p>
 
                 <p class="text-purple-400"><?= date("D, d M Y H:i:s") ?></p>
             </div>
             <div class="bg-white p-4">
                 <p class="mb-2 font-semibold">What happened?</p>
 
-                <p class="pb-4 text-sm"><?= (ENV === 'development') ? $message : $errors[1]; ?></p>
+                <p class="pb-4 text-sm"><?= (ENV === 'development') ? $message : $client_message; ?></p>
 
                 <p>Your IP: <span class="text-xs text-blue-600"> <?= $_SERVER['REMOTE_ADDR'] ?></span></p>
 

@@ -21,7 +21,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 //configure config to always point to env
 App::bind('config', Config::load()); 
 
-print_r(App::get('config'));
+//print_r(App::get('config'));
 
 session_start();
 
