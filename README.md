@@ -1,2 +1,2 @@
-# BANK-TRANS
+# bank transactions
 
