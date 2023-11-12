@@ -15,10 +15,20 @@ class Router {
         require $file;
         return $router;
     }
+    public function resource($uri, $class) {
+        //index //get
+        $this->get($uri, "{$class}@index");
+        //index //post //create
+        $this->post($uri, "{$class}@create");
+        //index //get //view one
+        $this->get("$uri/{id}", "{$class}@show");
+        //index //post //update one
+        $this->post("$uri/update/{id}", "{$class}@update");
+        //index //post //delete one
+        $this->post("$uri/delete/{id}", "{$class}@delete");
+    }
 
     public function get($uri, $controller) {
-
-
         $uri = preg_replace('/{[^}]+}/', '(.+)', $uri);
         $this->routes['GET'][$uri] = $controller;
     }
@@ -28,8 +38,7 @@ class Router {
         $this->routes['POST'][$uri] = $controller;
     }
 
-
-
+  
     public function direct($uri, $requestType) {
 
         /*
