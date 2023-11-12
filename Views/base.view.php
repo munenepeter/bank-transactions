@@ -20,9 +20,19 @@
 </head>
 <style>
     * {
+        -webkit-tab-highlight-color: transparent;
         font-family: 'Ubuntu', sans-serif;
         font-display: swap;
     }
+
+    [x-cloak] {
+      display: none;
+    }
+
+    .grid--gray {
+    background-image: radial-gradient(#ddd 3px, transparent 3px);
+    background-size: 24px 24px;
+}
 </style>
 
 <body class="bg-purple-50">
