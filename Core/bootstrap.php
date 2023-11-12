@@ -18,17 +18,12 @@ require 'helpers.php';
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+//configure config to always point to env
+App::bind('config', Config::load()); 
 
-$config = Config::load();
-
-print_r($config);
-
-
-//configure config to always point to config.php
-App::bind('config', require 'config.php'); 
+print_r(App::get('config'));
 
 session_start();
-
 
 /**
  *Bind the Database credentials and connect to the app
@@ -37,5 +32,5 @@ session_start();
 */
 
 App::bind('database', new QueryBuilder(
-    Connection::make($config['db'])
+    Connection::make(App::get('config')['db'])
 ));
