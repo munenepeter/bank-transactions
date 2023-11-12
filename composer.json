@@ -1,0 +1,16 @@
+{
+    "name": "banktrans/banktrans",
+    "description": "A simple banking system concept",
+    "authors": [
+        {
+            "name": "munenepeter",
+            "email": "munenenjega@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Chungu\\": "./"
+        }
+    }
+}
