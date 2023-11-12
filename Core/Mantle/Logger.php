@@ -35,16 +35,16 @@ class Logger {
     }
 
     public static function Debug(string $log){
-        static::log("Debug", $log);
+        self::log("Debug", $log);
     }
     public static function Info(string $log){
-        static::log("Info", $log);
+        self::log("Info", $log);
     }
     public static function Error(string $log){
-        static::log("Error", $log);
+        self::log("Error", $log);
     }
     public static function Warning(string $log){
-        static::log("Warning", $log);
+        self::log("Warning", $log);
     }
 
     protected static function getUserInfo() {

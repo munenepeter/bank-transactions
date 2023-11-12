@@ -1,52 +1,53 @@
 <?php
 
 namespace Chungu\Core\Mantle;
+use Chungu\Mantle\Cache;
 
 class Config
 {
-    protected static $envFilePath;
-    protected static $cacheKey = 'config_cache';
+    protected static $env_file = APP_ROOT.'.env';
+    protected static $cache_key = 'config_cache';
 
 
-    public function load()
-    {
+    public static function load(): array{
         // Check if cached config exists
-        $cachedConfig = Cache::get($this->cacheKey);
+        $cachedConfig = Cache::get(self::$cache_key);
         if ($cachedConfig !== null) {
             return $cachedConfig;
         }
 
         // If not, load and parse the configuration file
-        $config = $this->parseFile();
+        $config = self::parseFile();
 
         // Cache the config for future use
-        Cache::put($this->cacheKey, $config);
+        Cache::put(self::$cache_key, $config);
 
         return $config;
     }
 
     private static function checkEnvFile(){
         //check if the file exists & is readable
-        if(!is_readable($env_file)){
-            //log that the env does not exist
-
+        if(!is_readable(self::$env_file)){
+            Logger::Debug("Config: Seems like the env file at ". self::$env_file." is missing");
+            Logger::Info("Config: Attempting to copy from the deafult .env.example....");
             //if not available, copy the ENV.EXAMPLE
-            if(!copy(from: $env_example_file, to: $env_file)){
-
-            } //log that the copy operation failed
+            if(!copy(from: APP_ROOT.'.env.example', to: self::$env_file)){
+                Logger::Error("Config: Can't copy the env.example, is it missing?");
+                return false;
+            } 
         }
+        return true;
     }
 
-    protected function parseFile()
-    {
+    protected static function parseFile(){
+
         $config = [];
 
-        // Check if the file exists and is readable
-        if (!is_readable($this->envFilePath)) {
-          
+        if(!self::checkEnvFile()){
+            throw new \Exception("Error Processing ENV file", 500);
         }
 
-        $envLines = file($this->envFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $envLines = file(self::$env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         foreach ($envLines as $line) {
             // Check if the line contains an underscore
@@ -65,14 +66,14 @@ class Config
 
         foreach ($config as $parent => $childArray) {
             foreach ($childArray as $child => $value) {
-                $config[$parent][$child] = $this->replaceVariables($value, $config);
+                $config[$parent][$child] = self::replaceVariables($value, $config);
             }
         }
 
         return $config;
     }
 
-    protected function replaceVariables($value, $config) {
+    protected static function replaceVariables($value, $config) {
 
         return preg_replace_callback(
             '/\${(.*?)}/',
