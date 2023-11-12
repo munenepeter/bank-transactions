@@ -34,6 +34,19 @@ class Logger {
         self::writeBufferToFile();
     }
 
+    public static function Debug(string $log){
+        static::log("Debug", $log);
+    }
+    public static function Info(string $log){
+        static::log("Info", $log);
+    }
+    public static function Error(string $log){
+        static::log("Error", $log);
+    }
+    public static function Warning(string $log){
+        static::log("Warning", $log);
+    }
+
     protected static function getUserInfo() {
         if (self::$cachedUserInfo === null) {
             // Check if cached user info exists

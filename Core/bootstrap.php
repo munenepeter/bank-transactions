@@ -17,6 +17,13 @@ require 'helpers.php';
 require_once __DIR__.'/../vendor/autoload.php';
 
 
+$envFilePath = __DIR__.'/.env';
+$config = new Config($envFilePath);
+$result = $config->load();
+
+print_r($result);
+
+
 //configure config to always point to config.php
 App::bind('config', require 'config.php'); 
 
